@@ -29,6 +29,8 @@ Before diving in, check out our [**Interactive Demo**](https://raheememad.github
 - **Day 2**: Workout logging features + performance optimization  
 - **Day 3**: Polish, testing, and documentation
 
+⏳ Timeframe: This challenge is designed to be completed in ~3 working days. We understand people have different schedules, so if you need a bit more time, just let us know — we’re flexible, as long as communication is clear.
+
 ---
 
 ## 🎪 Core Requirements (The Must-Haves)
