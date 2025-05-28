@@ -22,7 +22,7 @@ Build a workout logging app that works **seamlessly offline** and **syncs intell
 ## 🚀 Getting Started
 
 ### Demo First!
-Before diving in, check out our [**Interactive Demo**](your-demo-link-here) to see exactly what you're building. Toggle the network on/off to see the offline magic in action! ✨
+Before diving in, check out our [**Interactive Demo**](https://raheememad.github.io/Live_Demo/) to see exactly what you're building. Toggle the network on/off to see the offline magic in action! ✨
 
 ### Time Allocation: 72 Hours
 - **Day 1**: Redux architecture setup (Redux-Persist + Redux Offline)
