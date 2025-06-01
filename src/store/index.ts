@@ -1,31 +1,37 @@
-import {configureStore, Tuple} from '@reduxjs/toolkit';
+import {configureStore} from '@reduxjs/toolkit';
 import {persistStore, persistReducer} from 'redux-persist';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-// @ts-ignore
-import offline from '@redux-offline/redux-offline/lib/config';
-// @ts-ignore
-import offlineConfig from '@redux-offline/redux-offline/lib/defaults';
-import persistConfig from './middleware/persistence';
+import {offline} from '@redux-offline/redux-offline';
 import rootReducer from './rootReducer';
-const offlineEnhancer = offline(offlineConfig);
+import persistConfig from './middleware/persistence';
+import {customOfflineConfig} from './middleware/offline';
+import thunk from 'redux-thunk';
 
-// Wrap your reducer with persist + offline reducer
-const enhancedReducer = offlineEnhancer.enhanceReducer(
-  persistReducer(persistConfig, rootReducer),
-);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Configure store properly
 export const store = configureStore({
-  reducer: enhancedReducer,
+  reducer: persistedReducer,
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({serializableCheck: false}).concat(
-      offlineEnhancer.middleware,
-    ),
-  enhancers: getDefaultEnhancers =>
-    new Tuple(...offlineEnhancer.enhanceStore(getDefaultEnhancers())),
+    getDefaultMiddleware({
+      serializableCheck: false,
+      thunk: {
+        extraArgument: {
+          ...customOfflineConfig,
+          effect: async (
+            effect: {url: string | URL | Request; options: RequestInit},
+            action: any,
+          ) => {
+            const response = await customOfflineConfig.effect(effect, action);
+            return response;
+          },
+        },
+      },
+    }),
+  devTools: process.env.NODE_ENV !== 'production',
+  enhancers: getDefaultEnhancers => [offline(customOfflineConfig)] as any,
 });
 
 export const persistor = persistStore(store);
 
-export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export default store;

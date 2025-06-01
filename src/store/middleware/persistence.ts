@@ -4,7 +4,6 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   version: 1,
-  whitelist: ['workouts', 'offline'],
+  whitelist: ['workouts'],
 };
-
 export default persistConfig;
