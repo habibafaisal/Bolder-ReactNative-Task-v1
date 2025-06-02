@@ -1,7 +1,6 @@
 // src/store/workoutsSlice.ts
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Category, Exercise, UserStats, WorkoutSession } from '../types/types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type WorkoutsState = {
   sessions: WorkoutSession[];

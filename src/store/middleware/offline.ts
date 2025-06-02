@@ -2,12 +2,15 @@ import { offline } from '@redux-offline/redux-offline';
 import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
 
 import NetInfo from '@react-native-community/netinfo';
+import customRetry from './customRetry';
+
+let isOnline: boolean
 
 const detectNetwork = (callback: (arg0: boolean) => void) => {
   const unsubscribe = NetInfo.addEventListener(state => {
+    isOnline = !!state.isConnected;
     callback(!!state.isConnected);
   });
-
   return unsubscribe;
 };
 
@@ -29,11 +32,9 @@ export const customOfflineConfig = {
       error.response.status < 500;
     return shouldDiscard;
   },
-  retry: (action: any, retries: number) => {
-    console.log('Retry called here');
-    if (retries < 5) {
-      return 1000 * Math.pow(2, retries);
-    }
+  retry: (action: any, retries: number, error: any) => {
+    return customRetry(action, retries, error, isOnline);
+
   },
   detectNetwork,
 

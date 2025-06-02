@@ -135,7 +135,7 @@ const WorkoutHistory: React.FC = () => {
         />
       </View>
 
-      {lastSyncFailed ? (
+      {/* {lastSyncFailed ? (
         <Text style={{ color: 'red', textAlign: 'center' }}>
           Last Sync failed. Will retry when online.
         </Text>
@@ -143,7 +143,7 @@ const WorkoutHistory: React.FC = () => {
         <Text style={{ color: 'green', textAlign: 'center' }}>
           Last Sync Success.
         </Text>
-      )}
+      )} */}
       {syncing && <ActivityIndicator />}
       <FlashList
         data={sessions}

@@ -6,16 +6,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import { useEffect } from 'react';
 import { seedMockWorkouts } from '../services/mockData';
+import { ActivityIndicator } from 'react-native';
+import { colors } from '../constants/colors';
 const Stack = createStackNavigator();
 
 function AppStack() {
-  const workouts = useSelector((state: RootState) => state.workouts);
+  const workouts = useSelector((state: RootState) => state?.workouts);
+  const bootstrapped = useSelector((state: RootState) => state._persist?.rehydrated);
   const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
-    if (workouts.sessions.length === 0) {
+    if (bootstrapped && (!workouts?.sessions || workouts.sessions.length === 0)) {
       seedMockWorkouts(dispatch);
     }
-  }, []);
+  }, [bootstrapped]);
+
+  if (!bootstrapped) {
+    return <ActivityIndicator size="large" color={colors.primary} />;
+  }
 
   return (
     <NavigationContainer>

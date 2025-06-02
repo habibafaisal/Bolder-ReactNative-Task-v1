@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Exercise, WorkoutSession} from '../store/types/types';
-import {addSession} from '../store/slices/workoutsSlice';
-import {AppDispatch} from '../store';
+import { Exercise, WorkoutSession } from '../store/types/types';
+import { addSession } from '../store/slices/workoutsSlice';
+import { AppDispatch } from '../store';
 
 const mockWorkouts: WorkoutSession[] = [
   {
@@ -15,7 +15,7 @@ const mockWorkouts: WorkoutSession[] = [
         reps: 15,
         categoryId: 'bodyweight',
       },
-      {id: 'squats', name: 'Squats', sets: 4, reps: 12, categoryId: 'legs'},
+      { id: 'squats', name: 'Squats', sets: 4, reps: 12, categoryId: 'legs' },
     ],
     synced: true,
   },
@@ -38,7 +38,7 @@ const mockWorkouts: WorkoutSession[] = [
         categoryId: 'strength',
       },
     ],
-    synced: false,
+    synced: true,
   },
   {
     id: '3',
@@ -66,7 +66,7 @@ const mockWorkouts: WorkoutSession[] = [
         categoryId: 'bodyweight',
       },
     ],
-    synced: false,
+    synced: true,
   },
   {
     id: '5',
@@ -80,7 +80,7 @@ const mockWorkouts: WorkoutSession[] = [
         categoryId: 'bodyweight',
       },
     ],
-    synced: false,
+    synced: true,
   },
 ];
 export const mockExercises: Exercise[] = [

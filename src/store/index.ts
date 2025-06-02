@@ -5,6 +5,7 @@ import rootReducer from './rootReducer';
 import persistConfig from './middleware/persistence';
 import { customOfflineConfig } from './middleware/offline';
 import thunk from 'redux-thunk';
+import { validateWorkoutMiddleware } from './middleware/validateWorkoutMiddleware';
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -25,7 +26,7 @@ export const store = configureStore({
           },
         },
       },
-    }),
+    }).concat(validateWorkoutMiddleware),
   devTools: process.env.NODE_ENV !== 'production',
   enhancers: getDefaultEnhancers => [...getDefaultEnhancers(), offline(customOfflineConfig)] as any,
 });
