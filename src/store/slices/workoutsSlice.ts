@@ -45,6 +45,18 @@ const workoutsSlice = createSlice({
   name: 'workouts',
   initialState,
   reducers: {
+    resetSession(state) {
+      state.sessions = [];
+      state.exercises = [];
+      state.categories = [];
+      state.stats = {
+        totalSessions: 0,
+        totalWeightLifted: 0,
+        totalTimeSpent: 0,
+      };
+      state.syncing = false;
+      state.lastSyncFailed = false;
+    },
     addSession(state, action: PayloadAction<WorkoutSession>) {
       state.sessions.push({
         ...action.payload,
@@ -87,6 +99,6 @@ const workoutsSlice = createSlice({
 
 });
 
-export const { addSession, updateSession, setSyncing, setSyncFailed } =
+export const { addSession, updateSession, setSyncing, setSyncFailed, resetSession } =
   workoutsSlice.actions;
 export default workoutsSlice.reducer;

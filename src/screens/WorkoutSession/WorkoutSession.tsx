@@ -12,11 +12,11 @@ import NetInfo from '@react-native-community/netinfo';
 import CustomText from '../../components/common/CustomText';
 import { colors } from '../../constants/colors';
 import { responsiveFontSize } from '../../constants/sizes';
-import { Exercise, Workout } from '../../services/sync/workoutSync';
 import { mockExercises } from '../../services/sync/mockData';
-import { completeWorkoutOffline } from '../../store/slices/workoutsSlice';
+import { completeWorkoutOffline, resetSession } from '../../store/slices/workoutsSlice';
 import { AppDispatch } from '../../store';
 import { useDispatch } from 'react-redux';
+import { Exercise, WorkoutSession as WorkoutSessionType } from '../../store/types/types';
 
 const WorkoutSession = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,7 +29,11 @@ const WorkoutSession = () => {
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(true);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
-
+  const [showWorkoutCompleteModal, setShowWorkoutCompleteModal] =
+    useState<boolean>(false);
+  const [completedWorkout, setCompletedWorkout] = useState<WorkoutSessionType | null>(
+    null,
+  );
   useEffect(() => {
     setExercises(mockExercises);
     setExercisesCount(mockExercises.length);
@@ -65,11 +69,7 @@ const WorkoutSession = () => {
     setSetsCount(setsCount + 1);
   };
 
-  const [showWorkoutCompleteModal, setShowWorkoutCompleteModal] =
-    useState<boolean>(false);
-  const [completedWorkout, setCompletedWorkout] = useState<Workout | null>(
-    null,
-  );
+
 
   const handleFinishWorkout = async () => {
     if (isSubmitting) return;
@@ -78,8 +78,7 @@ const WorkoutSession = () => {
     setIsSubmitting(true);
 
     try {
-      // Create a new workout object
-      const newCompletedWorkout: Workout = {
+      const newCompletedWorkout: WorkoutSessionType = {
         id: Date.now().toString(),
         date: new Date().toISOString().split('T')[0],
         duration: durationSeconds,
@@ -89,11 +88,13 @@ const WorkoutSession = () => {
       dispatch(completeWorkoutOffline(newCompletedWorkout));
 
       setCompletedWorkout(newCompletedWorkout);
-      // await saveWorkout(newCompletedWorkout, isConnected);
       setShowWorkoutCompleteModal(true);
+      dispatch(resetSession());
+      // setDuration('00:00');
+      // setDurationSeconds(0);
+      // setCompletedWorkout(null);
     } catch (error) {
       console.error('Error finishing workout:', error);
-      // showMessage('Failed to save workout. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -106,13 +107,10 @@ const WorkoutSession = () => {
     setIsTimerRunning(true);
     setShowWorkoutCompleteModal(false);
     setCompletedWorkout(null);
-    // Reset to default exercises or keep the same ones based on preference
-    // You could also navigate to an exercise selection screen here
   };
 
-  const navigateBack = () => {
+  const closeModal = () => {
     setShowWorkoutCompleteModal(false);
-    navigation.goBack();
   };
 
   return (
@@ -271,11 +269,11 @@ const WorkoutSession = () => {
 
               <TouchableOpacity
                 style={[styles.modalButton, styles.finishButton]}
-                onPress={navigateBack}>
+                onPress={closeModal}>
                 <CustomText
                   fontSize={responsiveFontSize(18)}
                   color={colors.textInverse}
-                  textMessage="Go Back"
+                  textMessage="Close"
                 />
               </TouchableOpacity>
             </View>
