@@ -13,7 +13,7 @@ import CustomText from '../../components/common/CustomText';
 import { colors } from '../../constants/colors';
 import { responsiveFontSize } from '../../constants/sizes';
 import { Exercise, Workout } from '../../services/sync/workoutSync';
-import { mockExercises } from '../../services/mockData';
+import { mockExercises } from '../../services/sync/mockData';
 import { completeWorkoutOffline } from '../../store/slices/workoutsSlice';
 import { AppDispatch } from '../../store';
 import { useDispatch } from 'react-redux';

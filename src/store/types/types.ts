@@ -1,3 +1,6 @@
+import { PersistState } from "redux-persist";
+import { WorkoutsState } from "../slices/workoutsSlice";
+
 export interface WorkoutSession {
   id: string;
   date: string;
@@ -5,7 +8,12 @@ export interface WorkoutSession {
   duration?: number;
   synced: boolean;
   syncFailed?: boolean;
+  isArchived?: boolean;
+}
 
+export interface PersistedRootState {
+  workouts: WorkoutsState;
+  _persist: PersistState;
 }
 
 export interface Exercise {

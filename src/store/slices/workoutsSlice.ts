@@ -2,7 +2,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Category, Exercise, UserStats, WorkoutSession } from '../types/types';
 
-type WorkoutsState = {
+export type WorkoutsState = {
   sessions: WorkoutSession[];
   exercises: Exercise[];
   categories: Category[];

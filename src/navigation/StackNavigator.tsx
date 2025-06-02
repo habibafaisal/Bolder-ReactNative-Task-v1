@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import { useEffect } from 'react';
-import { seedMockWorkouts } from '../services/mockData';
+import { seedMockWorkouts } from '../services/sync/mockData';
 import { ActivityIndicator } from 'react-native';
 import { colors } from '../constants/colors';
 const Stack = createStackNavigator();

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Exercise, WorkoutSession } from '../store/types/types';
-import { addSession } from '../store/slices/workoutsSlice';
-import { AppDispatch } from '../store';
+import { Exercise, WorkoutSession } from '../../store/types/types';
+import { addSession } from '../../store/slices/workoutsSlice';
+import { AppDispatch } from '../../store';
 
 const mockWorkouts: WorkoutSession[] = [
   {

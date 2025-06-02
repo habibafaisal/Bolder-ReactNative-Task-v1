@@ -2,10 +2,10 @@ import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import { offline } from '@redux-offline/redux-offline';
 import rootReducer from './rootReducer';
-import persistConfig from './middleware/persistence';
 import { customOfflineConfig } from './middleware/offline';
 import thunk from 'redux-thunk';
 import { validateWorkoutMiddleware } from './middleware/validateWorkoutMiddleware';
+import { persistConfig } from './middleware/persistence';
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
