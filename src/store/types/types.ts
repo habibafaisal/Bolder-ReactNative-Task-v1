@@ -2,8 +2,10 @@ export interface WorkoutSession {
   id: string;
   date: string;
   exercises: Exercise[];
+  duration?: number;
   synced: boolean;
   syncFailed?: boolean;
+
 }
 
 export interface Exercise {

@@ -1,4 +1,4 @@
-import {offline} from '@redux-offline/redux-offline';
+import { offline } from '@redux-offline/redux-offline';
 import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
 
 import NetInfo from '@react-native-community/netinfo';
@@ -14,12 +14,14 @@ const detectNetwork = (callback: (arg0: boolean) => void) => {
 export const customOfflineConfig = {
   ...defaultConfig,
   effect: (
-    effect: {url: string | URL | Request; options: RequestInit | undefined},
+    effect: { url: string | URL | Request; options: RequestInit | undefined },
     action: any,
   ) => {
-    return fetch(effect.url, effect.options);
+    console.log('Effect called here');
+    return Promise.resolve(action.payload);
+    // return fetch(effect.url, effect.options);
   },
-  discard: (error: {response: {status: number}}, action: any, retries: any) => {
+  discard: (error: { response: { status: number } }, action: any, retries: any) => {
     const shouldDiscard =
       error &&
       error.response &&
@@ -28,9 +30,11 @@ export const customOfflineConfig = {
     return shouldDiscard;
   },
   retry: (action: any, retries: number) => {
+    console.log('Retry called here');
     if (retries < 5) {
       return 1000 * Math.pow(2, retries);
     }
   },
   detectNetwork,
+
 };

@@ -6,17 +6,17 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import NetInfo from '@react-native-community/netinfo';
 import CustomText from '../../components/common/CustomText';
-import {colors} from '../../constants/colors';
-import {responsiveFontSize} from '../../constants/sizes';
-import {Exercise, Workout} from '../../services/sync/workoutSync';
-import {mockExercises} from '../../services/mockData';
-import {completeWorkoutOffline} from '../../store/slices/workoutsSlice';
-import {AppDispatch} from '../../store';
-import {useDispatch} from 'react-redux';
+import { colors } from '../../constants/colors';
+import { responsiveFontSize } from '../../constants/sizes';
+import { Exercise, Workout } from '../../services/sync/workoutSync';
+import { mockExercises } from '../../services/mockData';
+import { completeWorkoutOffline } from '../../store/slices/workoutsSlice';
+import { AppDispatch } from '../../store';
+import { useDispatch } from 'react-redux';
 
 const WorkoutSession = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -84,7 +84,7 @@ const WorkoutSession = () => {
         date: new Date().toISOString().split('T')[0],
         duration: durationSeconds,
         exercises: [...exercises],
-        status: true, // true means completed
+        synced: false,
       };
       dispatch(completeWorkoutOffline(newCompletedWorkout));
 
@@ -208,7 +208,7 @@ const WorkoutSession = () => {
           <View
             style={[
               styles.networkIndicator,
-              {backgroundColor: isConnected ? colors.success : colors.error},
+              { backgroundColor: isConnected ? colors.success : colors.error },
             ]}
           />
           <CustomText
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 24,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     // Gradient effect with background color
     shadowColor: colors.primary,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 4,
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     width: '90%',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
   startNewButton: {
     backgroundColor: colors.success,
     shadowColor: colors.success,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 4,

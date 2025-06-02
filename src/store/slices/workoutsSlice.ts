@@ -1,6 +1,6 @@
 // src/store/workoutsSlice.ts
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {Category, Exercise, UserStats, WorkoutSession} from '../types/types';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Category, Exercise, UserStats, WorkoutSession } from '../types/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type WorkoutsState = {
@@ -26,32 +26,18 @@ const initialState: WorkoutsState = {
   lastSyncFailed: false,
 };
 
-export const loadWorkoutsFromStorage = createAsyncThunk(
-  'workouts/loadFromStorage',
-  async (): Promise<WorkoutSession[]> => {
-    const stored = await AsyncStorage.getItem('@workouts');
-    if (stored) {
-      return JSON.parse(stored);
-    }
-    console.log('No workouts found in storage');
-    return [];
-  },
-);
 
 export const completeWorkoutOffline = (workout: WorkoutSession) => ({
   type: 'workouts/addSession',
   payload: workout,
   meta: {
     offline: {
-      // effect: actual API call
-      effect: {
-        url: 'https://your.api/endpoint',
-        method: 'POST',
-        body: JSON.stringify(workout),
-        headers: {'Content-Type': 'application/json'},
+      effect: () => {
+        console.log('Effect called');
+        return Promise.resolve(workout);
       },
-      commit: {type: 'workouts/syncSuccess', meta: {id: workout.id}},
-      rollback: {type: 'workouts/syncFailure', meta: {id: workout.id}},
+      commit: { type: 'workouts/syncSuccess', meta: { id: workout.id } },
+      rollback: { type: 'workouts/syncFailure', meta: { id: workout.id } },
     },
   },
 });
@@ -67,7 +53,7 @@ const workoutsSlice = createSlice({
       });
       state.stats.totalSessions += 1;
     },
-    updateSession: (state, action) => {
+    updateSession: (state, action: PayloadAction<WorkoutSession>) => {
       const index = state.sessions.findIndex(s => s.id === action.payload.id);
       if (index !== -1) {
         state.sessions[index] = action.payload;
@@ -79,32 +65,29 @@ const workoutsSlice = createSlice({
     setSyncFailed: (state, action: PayloadAction<boolean>) => {
       state.lastSyncFailed = action.payload;
     },
-    syncSuccess(state, action: PayloadAction<{id: string}>) {
+    syncSuccess(state, action: PayloadAction<{ id: string }>) {
       const session = state.sessions.find(s => s.id === action.payload.id);
+      console.log('session syncSuccess', session);
       if (session) {
         session.synced = true;
+        session.syncFailed = false;
       }
+      state.lastSyncFailed = false;
     },
-    syncFailure(state, action: PayloadAction<{id: string}>) {
+    syncFailure(state, action: PayloadAction<{ id: string }>) {
       const session = state.sessions.find(s => s.id === action.payload.id);
+      console.log('session syncFailure', session);
+
       if (session) {
         session.synced = false;
+        session.syncFailed = true;
       }
       state.lastSyncFailed = true;
     },
   },
-  extraReducers: builder => {
-    builder.addCase(loadWorkoutsFromStorage.pending, (state, action) => {
-      console.log('Loading workouts from storage...');
-    });
-    builder.addCase(loadWorkoutsFromStorage.fulfilled, (state, action) => {
-      console.log('Workouts loaded from storage:', action.payload);
-      state.sessions = action.payload;
-      state.stats.totalSessions = action.payload.length;
-    });
-  },
+
 });
 
-export const {addSession, updateSession, setSyncing, setSyncFailed} =
+export const { addSession, updateSession, setSyncing, setSyncFailed } =
   workoutsSlice.actions;
 export default workoutsSlice.reducer;

@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect} from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,41 +7,39 @@ import {
   Text,
 } from 'react-native';
 import ScreenHeader from '../../components/common/ScreenHeader';
-import {FlashList} from '@shopify/flash-list';
-import {colors} from '../../constants/colors';
+import { FlashList } from '@shopify/flash-list';
+import { colors } from '../../constants/colors';
 import CustomText from '../../components/common/CustomText';
 import Button from '../../components/common/Button';
-import {responsiveFontSize, windowHeight} from '../../constants/sizes';
-import {useDispatch, useSelector} from 'react-redux';
-import {loadWorkoutsFromStorage} from '../../store/slices/workoutsSlice';
-import store, {RootState} from '../../store';
-import {ThunkDispatch} from 'redux-thunk';
-import {AnyAction} from '@reduxjs/toolkit';
-import {WorkoutSession} from '../../store/types/types';
-import {watchNetworkAndSync} from '../../services/sync/workoutSync';
-import {useFocusEffect} from '@react-navigation/native';
+import { responsiveFontSize, windowHeight } from '../../constants/sizes';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
+import { WorkoutSession } from '../../store/types/types';
 
 const WorkoutHistory: React.FC = () => {
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
   const sessions = useSelector((state: RootState) => state.workouts.sessions);
   const isOnline = useSelector((state: RootState) => state.offline?.online);
-  const {syncing, lastSyncFailed} = useSelector(
+  const { syncing, lastSyncFailed } = useSelector(
     (state: RootState) => state.workouts,
   );
-
-  useEffect(() => {
-    fetch();
-  }, []);
-
-  const fetch = async () => {
-    await dispatch(loadWorkoutsFromStorage());
-  };
+  console.log('sessions ss', sessions, { syncing, lastSyncFailed });
+  // useEffect(() => {
+  //   fetch();
+  // }, []);
+  // const fetch = async () => {
+  //   const stored = await AsyncStorage.getItem('@workouts');
+  //   console.log('stored', stored);
+  //   await dispatch(loadWorkoutsFromStorage());
+  // };
 
   const keyExtractor = useCallback(
     (item: any, i: number) => `${i}-${item.id}`,
     [],
   );
-  const renderWorkoutItem = ({item}: {item: WorkoutSession}) => (
+  const renderWorkoutItem = ({ item }: { item: WorkoutSession }) => (
     <View style={styles.workoutCard}>
       <View style={styles.workoutHeader}>
         <CustomText
@@ -137,12 +135,12 @@ const WorkoutHistory: React.FC = () => {
         />
       </View>
 
-      {!lastSyncFailed ? (
-        <Text style={{color: 'red', textAlign: 'center'}}>
+      {lastSyncFailed ? (
+        <Text style={{ color: 'red', textAlign: 'center' }}>
           Last Sync failed. Will retry when online.
         </Text>
       ) : (
-        <Text style={{color: 'green', textAlign: 'center'}}>
+        <Text style={{ color: 'green', textAlign: 'center' }}>
           Last Sync Success.
         </Text>
       )}
@@ -201,7 +199,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 15,
     shadowColor: colors.shadowLight,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 4,

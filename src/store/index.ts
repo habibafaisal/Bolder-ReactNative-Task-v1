@@ -1,9 +1,9 @@
-import {configureStore} from '@reduxjs/toolkit';
-import {persistStore, persistReducer} from 'redux-persist';
-import {offline} from '@redux-offline/redux-offline';
+import { configureStore } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import { offline } from '@redux-offline/redux-offline';
 import rootReducer from './rootReducer';
 import persistConfig from './middleware/persistence';
-import {customOfflineConfig} from './middleware/offline';
+import { customOfflineConfig } from './middleware/offline';
 import thunk from 'redux-thunk';
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -17,7 +17,7 @@ export const store = configureStore({
         extraArgument: {
           ...customOfflineConfig,
           effect: async (
-            effect: {url: string | URL | Request; options: RequestInit},
+            effect: { url: string | URL | Request; options: RequestInit },
             action: any,
           ) => {
             const response = await customOfflineConfig.effect(effect, action);
@@ -27,7 +27,7 @@ export const store = configureStore({
       },
     }),
   devTools: process.env.NODE_ENV !== 'production',
-  enhancers: getDefaultEnhancers => [offline(customOfflineConfig)] as any,
+  enhancers: getDefaultEnhancers => [...getDefaultEnhancers(), offline(customOfflineConfig)] as any,
 });
 
 export const persistor = persistStore(store);

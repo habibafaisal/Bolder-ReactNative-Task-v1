@@ -1,13 +1,11 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
 import WorkoutHistory from '../screens/WorkoutHistory/WorkoutHistory';
-import {NavigationContainer} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, RootState} from '../store';
-import {useEffect} from 'react';
-import {seedMockWorkouts} from '../services/mockData';
-import {loadWorkoutsFromStorage} from '../store/slices/workoutsSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationContainer } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
+import { useEffect } from 'react';
+import { seedMockWorkouts } from '../services/mockData';
 const Stack = createStackNavigator();
 
 function AppStack() {
