@@ -9,7 +9,7 @@ export const validateWorkoutMiddleware: Middleware = store => next => (action: u
     ) {
         const workout = (action as any).payload;
 
-        if (!workout?.id || !workout?.timestamp) {
+        if (!workout?.id || !workout?.date) {
             console.warn('[Middleware] Invalid workout payload:', workout);
             return;
         }

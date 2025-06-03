@@ -13,10 +13,11 @@ import CustomText from '../../components/common/CustomText';
 import { colors } from '../../constants/colors';
 import { responsiveFontSize } from '../../constants/sizes';
 import { mockExercises } from '../../services/sync/mockData';
-import { completeWorkoutOffline, resetSession } from '../../store/slices/workoutsSlice';
+import { resetSession } from '../../store/slices/workoutsSlice';
 import { AppDispatch } from '../../store';
 import { useDispatch } from 'react-redux';
 import { Exercise, WorkoutSession as WorkoutSessionType } from '../../store/types/types';
+import { completeWorkoutOffline } from '../../services/sync/sync';
 
 const WorkoutSession = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -89,10 +90,7 @@ const WorkoutSession = () => {
 
       setCompletedWorkout(newCompletedWorkout);
       setShowWorkoutCompleteModal(true);
-      dispatch(resetSession());
-      // setDuration('00:00');
-      // setDurationSeconds(0);
-      // setCompletedWorkout(null);
+      // dispatch(resetSession());
     } catch (error) {
       console.error('Error finishing workout:', error);
     } finally {
@@ -186,7 +184,7 @@ const WorkoutSession = () => {
               <CustomText
                 fontSize={responsiveFontSize(16)}
                 color={colors.textSecondary}
-                textMessage={`${exercise.sets} sets x ${exercise.reps} reps @ ${exercise.weight} lbs`}
+                textMessage={`${exercise.sets} sets x ${exercise.reps} reps`}
               />
             </View>
             <TouchableOpacity

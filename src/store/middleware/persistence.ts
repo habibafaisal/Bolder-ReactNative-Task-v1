@@ -6,7 +6,7 @@ import { RootState } from '../index';
 export const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  version: 0,
+  version: 1,
   whitelist: ['workouts'],
   migrate: createMigrate(migrations, { debug: true }),
 };
