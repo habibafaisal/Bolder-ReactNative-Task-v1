@@ -51,10 +51,15 @@ const workoutsSlice = createSlice({
       });
       state.stats.totalSessions += 1;
     },
-    updateSession: (state, action: PayloadAction<WorkoutSession>) => {
-      const index = state.sessions.findIndex(s => s.id === action.payload.id);
+    updateSession: (state, action: PayloadAction<{ session: WorkoutSession }>) => {
+      const index = state.sessions.findIndex(s => s.id === action.payload.session.id);
       if (index !== -1) {
-        state.sessions[index] = action.payload;
+        state.sessions[index] = {
+          ...action.payload.session,
+          synced: false,
+          syncFailed: false,
+          conflict: undefined,
+        };
       }
     },
     setSyncing: (state, action: PayloadAction<boolean>) => {
@@ -65,23 +70,27 @@ const workoutsSlice = createSlice({
     },
     syncSuccess(state, action: PayloadAction<{ id: string }>) {
       const session = state.sessions.find(s => s.id === action.payload.id);
-      console.log('session syncSuccess', session);
       if (session) {
         session.synced = true;
         session.syncFailed = false;
       }
       state.lastSyncFailed = false;
     },
-    syncFailure(state, action: PayloadAction<{ id: string }>) {
+    syncFailure(state, action: PayloadAction<{ id: string; conflict?: WorkoutSession }>) {
       const session = state.sessions.find(s => s.id === action.payload.id);
       console.log('session syncFailure', session);
-
       if (session) {
         session.synced = false;
         session.syncFailed = true;
+
+        if (action.payload.conflict) {
+          session.conflict = { remote: action.payload.conflict };
+        }
       }
+
       state.lastSyncFailed = true;
-    },
+    }
+
   },
 
 });

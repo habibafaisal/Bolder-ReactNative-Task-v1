@@ -4,12 +4,14 @@ export type WorkoutTemplate = {
     id: string;
     name: string;
     description?: string;
+    minutes?: number;
+    calories?: number;
     exercises: Exercise[];
 };
 
-export const workoutTemplates: WorkoutTemplate[] = [
+
+const baseTemplates: WorkoutTemplate[] = [
     {
-        id: 'template_leg_day',
         name: 'Leg Day',
         description: 'Strength-focused lower body workout',
         exercises: [
@@ -40,7 +42,6 @@ export const workoutTemplates: WorkoutTemplate[] = [
         ],
     },
     {
-        id: 'template_push_day',
         name: 'Push Day',
         description: 'Chest, shoulders and triceps workout',
         exercises: [
@@ -71,7 +72,6 @@ export const workoutTemplates: WorkoutTemplate[] = [
         ],
     },
     {
-        id: 'template_pull_day',
         name: 'Pull Day',
         description: 'Back and biceps workout',
         exercises: [
@@ -102,7 +102,6 @@ export const workoutTemplates: WorkoutTemplate[] = [
         ],
     },
     {
-        id: 'template_core',
         name: 'Core Blast',
         description: 'Ab and core strengthening workout',
         exercises: [
@@ -133,3 +132,22 @@ export const workoutTemplates: WorkoutTemplate[] = [
         ],
     },
 ];
+
+const generateMockWorkouts = (count = 1000): WorkoutTemplate[] => {
+    const templates: WorkoutTemplate[] = [];
+    for (let i = 0; i < count; i++) {
+        const base = baseTemplates[i % baseTemplates.length];
+        templates.push({
+            id: i.toString(),
+            name: `${base.name} ${i + 1}`,
+            description: base.description,
+            exercises: base.exercises,
+            minutes: Math.floor(Math.random() * 40) + 20,
+            calories: Math.floor(Math.random() * 400) + 200,
+        });
+    }
+    return templates;
+};
+
+export const workoutTemplates = generateMockWorkouts(1000);
+

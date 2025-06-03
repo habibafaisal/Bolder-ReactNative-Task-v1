@@ -1,16 +1,23 @@
 import { WorkoutSession } from "../../store/types/types";
 
-export const completeWorkoutOffline = (workout: WorkoutSession) => ({
+
+export const createWorkoutSession = (session: WorkoutSession) => ({
     type: 'workouts/addSession',
-    payload: workout,
+    payload: session,
     meta: {
         offline: {
-            effect: () => {
-                console.log('Effect called');
-                return Promise.resolve(workout);
+            effect: {
+                type: 'SIMULATED_CREATE_WORKOUT',
+                payload: session
             },
-            commit: { type: 'workouts/syncSuccess', meta: { id: workout.id } },
-            rollback: { type: 'workouts/syncFailure', meta: { id: workout.id } },
+            commit: { type: 'workouts/syncSuccess', payload: { id: session.id } },
+            rollback: {
+                type: 'workouts/syncFailure',
+                payload: { id: session.id },
+                meta: {
+                    handleConflict: true,
+                },
+            },
         },
     },
 });

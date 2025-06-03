@@ -25,7 +25,7 @@ const WorkoutHistory: React.FC = () => {
   const { syncing, lastSyncFailed } = useSelector(
     (state: RootState) => state.workouts,
   );
-  console.log('sessions ss', sessions, { syncing, lastSyncFailed });
+  // console.log('sessions ss', sessions, { syncing, lastSyncFailed });
   // useEffect(() => {
   //   fetch();
   // }, []);

@@ -3,6 +3,7 @@ import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
 
 import NetInfo from '@react-native-community/netinfo';
 import customRetry from './customRetry';
+import { WorkoutSession } from '../types/types';
 
 let isOnline: boolean
 
@@ -16,26 +17,52 @@ const detectNetwork = (callback: (arg0: boolean) => void) => {
 
 export const customOfflineConfig = {
   ...defaultConfig,
-  effect: (
-    effect: { url: string | URL | Request; options: RequestInit | undefined },
-    action: any,
-  ) => {
-    console.log('Effect called here');
-    return Promise.resolve(action.payload);
-    // return fetch(effect.url, effect.options);
+  effect: async (effect: any, action: any) => {
+    console.log('Effect called for:', action.type);
+
+    if (action.type === 'workouts/addSession') {
+      const localWorkout: WorkoutSession = action.payload;
+
+      const isConflict = Math.random() < 0.5;
+
+      if (isConflict) {
+        const serverVersion: WorkoutSession = {
+          ...localWorkout,
+          id: localWorkout.id + '-server',
+          synced: true,
+        };
+
+        const error = {
+          response: { status: 409 },
+          serverVersion,
+        };
+
+        return Promise.reject(error);
+      }
+
+      return Promise.resolve(localWorkout);
+    }
+
+    if (defaultConfig.effect) {
+      return defaultConfig.effect(effect, action);
+    }
+
+    return Promise.resolve();
   },
-  discard: (error: { response: { status: number } }, action: any, retries: any) => {
+  discard: (error: { response: { status: any; }; }, action: any, retries: any) => {
+    const status = error?.response?.status;
+
     const shouldDiscard =
-      error &&
-      error.response &&
-      error.response.status >= 400 &&
-      error.response.status < 500;
+      status &&
+      status >= 400 &&
+      status < 500 &&
+      status !== 409 && // do not discard conflict errors
+      status !== 429;
+
     return shouldDiscard;
   },
   retry: (action: any, retries: number, error: any) => {
     return customRetry(action, retries, error, isOnline);
-
   },
   detectNetwork,
-
 };

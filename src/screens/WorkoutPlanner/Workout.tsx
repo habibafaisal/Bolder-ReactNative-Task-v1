@@ -5,52 +5,81 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import CustomText from '../../components/common/CustomText';
-import {colors} from '../../constants/colors';
-import {responsiveFontSize} from '../../constants/sizes';
+import { colors } from '../../constants/colors';
+import { responsiveFontSize } from '../../constants/sizes';
 import ScreenHeader from '../../components/common/ScreenHeader';
-import {Exercise} from '../../store/types/types';
+import { Exercise } from '../../store/types/types';
+import { WorkoutTemplate, workoutTemplates } from '../../services/sync/mockWorkoutTemplates';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from '../../navigation/navigation.types';
+import { debounce } from 'lodash';
 
+
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'WorkoutDetail'
+>;
 const Workout = () => {
-  const navigation = useNavigation();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [types, setTypes] = useState<Exercise[]>([]);
+  const navigation = useNavigation<NavigationProp>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [types, setTypes] = useState<WorkoutTemplate[]>([]);
 
-  const fetchWorkoutTypes = async () => {};
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredTypes, setFilteredTypes] = useState<WorkoutTemplate[]>([]);
+
+  const searchWorkouts = debounce((query: string) => {
+    const lower = query.toLowerCase();
+    const filtered = types.filter(w =>
+      w.name.toLowerCase().includes(lower) ||
+      w.description?.toLowerCase().includes(lower)
+    );
+    setFilteredTypes(filtered);
+  }, 300);
+
+  const handleSearchChange = (text: string) => {
+    setSearchTerm(text);
+    searchWorkouts(text);
+  };
+
   useEffect(() => {
     fetchWorkoutTypes();
   }, []);
 
+  useEffect(() => {
+    setFilteredTypes(types);
+  }, [types]);
+
+  const fetchWorkoutTypes = async () => {
+    setLoading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setTypes(workoutTemplates);
+    } catch (error) {
+      console.error('Failed to fetch workout types:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleStartWorkout = () => {
-    // Navigate to workout session
     navigation.navigate('WorkoutSession' as never);
   };
 
   const renderWorkoutCard = (workout: Exercise) => (
-    <View key={workout.id} style={styles.workoutCard}>
+    <TouchableOpacity
+      key={workout.id}
+      style={styles.workoutCard}
+      onPress={() => navigation.navigate('WorkoutDetail', { workoutId: workout.id })}
+    >
       <View style={styles.workoutHeader}>
         <CustomText
           fontSize={responsiveFontSize(24)}
           color={colors.textPrimary}
           textMessage={workout.name}
         />
-        <View
-          style={[
-            styles.syncedChip,
-            {
-              backgroundColor: workout.synced
-                ? colors.success + '30'
-                : colors.error + '30',
-            },
-          ]}>
-          <CustomText
-            fontSize={responsiveFontSize(14)}
-            color={workout.synced ? colors.success : colors.error}
-            textMessage={workout.synced ? 'Synced' : 'Not Synced'}
-          />
-        </View>
       </View>
 
       <View style={styles.statsContainer}>
@@ -58,7 +87,7 @@ const Workout = () => {
           <CustomText
             fontSize={responsiveFontSize(28)}
             color={colors.primary}
-            textMessage={workout.minutes.toString()}
+            textMessage={workout?.minutes?.toString()}
           />
           <CustomText
             fontSize={responsiveFontSize(14)}
@@ -71,7 +100,7 @@ const Workout = () => {
           <CustomText
             fontSize={responsiveFontSize(28)}
             color={colors.primary}
-            textMessage={workout.exercises.toString()}
+            textMessage={workout.exercises.length}
           />
           <CustomText
             fontSize={responsiveFontSize(14)}
@@ -84,7 +113,7 @@ const Workout = () => {
           <CustomText
             fontSize={responsiveFontSize(28)}
             color={colors.primary}
-            textMessage={`${(workout.calories / 1000).toFixed(1)}k`}
+            textMessage={workout.calories + 'k'}
           />
           <CustomText
             fontSize={responsiveFontSize(14)}
@@ -93,7 +122,7 @@ const Workout = () => {
           />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -146,7 +175,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,

@@ -13,11 +13,11 @@ import CustomText from '../../components/common/CustomText';
 import { colors } from '../../constants/colors';
 import { responsiveFontSize } from '../../constants/sizes';
 import { mockExercises } from '../../services/sync/mockData';
-import { resetSession } from '../../store/slices/workoutsSlice';
-import { AppDispatch } from '../../store';
-import { useDispatch } from 'react-redux';
+import { resetSession, updateSession } from '../../store/slices/workoutsSlice';
+import { AppDispatch, RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
 import { Exercise, WorkoutSession as WorkoutSessionType } from '../../store/types/types';
-import { completeWorkoutOffline } from '../../services/sync/sync';
+import { createWorkoutSession } from '../../services/sync/sync';
 
 const WorkoutSession = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,17 +29,26 @@ const WorkoutSession = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(true);
   const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+  const isConnected = useSelector((state: RootState) => state.offline?.online);
+  const [conflictSession, setConflictSession] = useState<WorkoutSessionType | null>(null);
   const [showWorkoutCompleteModal, setShowWorkoutCompleteModal] =
     useState<boolean>(false);
-  const [completedWorkout, setCompletedWorkout] = useState<WorkoutSessionType | null>(
-    null,
+  const [showConflictModal, setShowConflictModal] = useState<boolean>(false);
+  const conflictedSession = useSelector((state: RootState) =>
+    state.workouts.sessions.find(session => session.conflict)
   );
   useEffect(() => {
     setExercises(mockExercises);
     setExercisesCount(mockExercises.length);
     setSetsCount(mockExercises.reduce((acc, ex) => acc + (ex.sets ?? 0), 0));
   }, []);
+  useEffect(() => {
+    if (conflictedSession) {
+      console.log('conflictedSession', conflictedSession);
+      setConflictSession(conflictedSession);
+      setShowConflictModal(true);
+    }
+  }, [conflictedSession]);
 
   useEffect(() => {
     if (!isTimerRunning) return;
@@ -59,6 +68,25 @@ const WorkoutSession = () => {
 
     return () => clearInterval(timer);
   }, [isTimerRunning]);
+
+  const handleResolveConflict = (choice: 'local' | 'remote') => {
+    if (!conflictSession) return;
+
+    const resolvedData =
+      choice === 'local'
+        ? conflictSession
+        : {
+          ...conflictSession.conflict.remote,
+          id: conflictSession.id, // preserve local ID
+        };
+
+    // Dispatch an action to update the session and retry sync
+    dispatch(updateSession({ session: resolvedData }));
+
+    // Clear modal and conflict state
+    setShowConflictModal(false);
+    setConflictSession(null);
+  };
 
   const handleAddSet = (index: number) => {
     const updatedExercises = [...exercises];
@@ -86,9 +114,8 @@ const WorkoutSession = () => {
         exercises: [...exercises],
         synced: false,
       };
-      dispatch(completeWorkoutOffline(newCompletedWorkout));
+      dispatch(createWorkoutSession(newCompletedWorkout));
 
-      setCompletedWorkout(newCompletedWorkout);
       setShowWorkoutCompleteModal(true);
       // dispatch(resetSession());
     } catch (error) {
@@ -104,7 +131,6 @@ const WorkoutSession = () => {
     setDurationSeconds(0);
     setIsTimerRunning(true);
     setShowWorkoutCompleteModal(false);
-    setCompletedWorkout(null);
   };
 
   const closeModal = () => {
@@ -274,6 +300,69 @@ const WorkoutSession = () => {
                   textMessage="Close"
                 />
               </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        visible={showConflictModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowConflictModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <CustomText
+              fontSize={responsiveFontSize(24)}
+              color={colors.textPrimary}
+              textMessage="Conflict Detected!"
+            />
+            <CustomText
+              fontSize={responsiveFontSize(18)}
+              color={colors.textSecondary}
+              textMessage="A conflict occurred while syncing your workout session."
+            />
+            {/* Display details of the local and remote sessions */}
+            <View style={styles.conflictDetails}>
+              <CustomText
+                fontSize={responsiveFontSize(16)}
+                color={colors.textPrimary}
+                textMessage="Your Version:"
+              />
+              {/* Display local session details */}
+              <CustomText
+                fontSize={responsiveFontSize(14)}
+                color={colors.textSecondary}
+                textMessage={JSON.stringify(conflictSession)}
+              />
+              <CustomText
+                fontSize={responsiveFontSize(16)}
+                color={colors.textPrimary}
+                textMessage="Server Version:"
+              />
+              {/* Display remote session details */}
+              <CustomText
+                fontSize={responsiveFontSize(14)}
+                color={colors.textSecondary}
+                textMessage={JSON.stringify(conflictSession?.conflict?.remote)}
+              />
+            </View>
+            {/* Add buttons to resolve the conflict */}
+            <View style={styles.modalButtonsContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.resolveButton]}
+                onPress={() => handleResolveConflict('local')}
+              >
+                <CustomText fontSize={18} color={colors.textInverse} textMessage="Keep My Version" />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.modalButton, styles.resolveButton]}
+                onPress={() => handleResolveConflict('remote')}
+              >
+                <CustomText fontSize={18} color={colors.textInverse} textMessage="Use Server Version" />
+              </TouchableOpacity>
+
             </View>
           </View>
         </View>

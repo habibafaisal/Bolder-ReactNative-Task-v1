@@ -8,6 +8,10 @@ import { useEffect } from 'react';
 import { seedMockWorkouts } from '../services/sync/mockData';
 import { ActivityIndicator } from 'react-native';
 import { colors } from '../constants/colors';
+import WorkoutDetail from '../screens/WorkoutPlanner/WorkoutDetail';
+import WorkoutSession from '../screens/WorkoutSession/WorkoutSession';
+import Workout from '../screens/WorkoutPlanner/Workout';
+import { linking } from './linking';
 const Stack = createStackNavigator();
 
 function AppStack() {
@@ -26,15 +30,18 @@ function AppStack() {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking} fallback={<ActivityIndicator size="large" color={colors.primary} />}>
       <Stack.Navigator
         initialRouteName="BottomTabs"
         screenOptions={{
           headerShown: false,
-          // gestureDirection: 'vertical',
+          gestureDirection: 'vertical',
         }}>
         <Stack.Screen name="BottomTabs" component={BottomTabs} />
-        {/* <Stack.Screen name="WorkoutHistory" component={WorkoutHistory} /> */}
+        <Stack.Screen name="Workout" component={Workout} />
+        <Stack.Screen name="WorkoutHistory" component={WorkoutHistory} />
+        <Stack.Screen name="WorkoutDetail" component={WorkoutDetail} />
+        <Stack.Screen name="WorkoutSession" component={WorkoutSession} />
       </Stack.Navigator>
     </NavigationContainer>
   );

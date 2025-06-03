@@ -9,6 +9,9 @@ export interface WorkoutSession {
   synced: boolean;
   syncFailed?: boolean;
   isArchived?: boolean;
+  conflict?: {
+    remote: WorkoutSession
+  }
 }
 
 export interface PersistedRootState {

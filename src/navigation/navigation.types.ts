@@ -4,8 +4,8 @@ export type RootStackParamList = {
   WorkoutHistory: undefined;
   WorkoutPlanner: undefined;
   WorkoutSession: undefined;
-  WorkoutDetails: {
-    workoutId: string;
+  WorkoutDetail: {
+    workoutId: string | number;
   };
   ExerciseDetails: {
     exerciseId: string;

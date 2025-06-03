@@ -1,11 +1,15 @@
 import { LinkingOptions } from '@react-navigation/native';
+import Workout from '../screens/WorkoutPlanner/Workout';
 
 export const linking: LinkingOptions<any> = {
-    prefixes: ['boldertask://'],
+    prefixes: ['boldertask://', 'https://boldertask.com'],
     config: {
         screens: {
-            WorkoutSession: {
-                path: 'workout/session/:id',
+            Workout: {
+                path: 'workout'
+            },
+            WorkoutDetail: {
+                path: 'workout/:id',
             },
         },
     },
