@@ -78,23 +78,21 @@ const workoutsSlice = createSlice({
     },
     syncFailure(state, action: PayloadAction<{ id: string; conflict?: WorkoutSession }>) {
       const session = state.sessions.find(s => s.id === action.payload.id);
-      console.log('session syncFailure', session);
       if (session) {
         session.synced = false;
         session.syncFailed = true;
-
         if (action.payload.conflict) {
           session.conflict = { remote: action.payload.conflict };
         }
       }
-
       state.lastSyncFailed = true;
     }
+
 
   },
 
 });
 
-export const { addSession, updateSession, setSyncing, setSyncFailed, resetSession } =
+export const { addSession, updateSession, setSyncing, setSyncFailed, resetSession, syncSuccess, syncFailure } =
   workoutsSlice.actions;
 export default workoutsSlice.reducer;
