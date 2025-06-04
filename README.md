@@ -53,6 +53,8 @@ npm test
 - ✅ FlashList replaces FlatList for better memory usage and speed
 - ✅ Debounced search implemented on Workout screen
 - ✅ Avoided general-purpose mapping during render (improved efficiency)
+- ✅ Debounced search for smoother UX
+
 
 ---
 
@@ -79,23 +81,43 @@ Supported links:
 
 ## 🧪 Testing Strategy
 
-Run tests:
-
-```bash
-npm test
-```
-
 Test files include:
 
 - `src/store/slices/__tests__/workoutsSlice.test.ts`
 - `src/store/middleware/__tests__/offlineConfig.test.ts`
 - `src/store/middleware/__tests__/customRetry.test.ts`
 
+
+Run tests:
+
+```bash
+npm test src/store/slices/__tests__/workoutsSlice.test.ts
+
+```
+
+
 Example output:
 
 ```
+> HabibaFaisal_BolderTask@0.0.1 test
+> jest src/store/slices/__tests__/workoutsSlice.test.ts
+
+  console.log
+    exists false
+
+      at log (src/store/slices/workoutsSlice.ts:49:15)
+          at Array.reduce (<anonymous>)
+
 PASS src/store/slices/__tests__/workoutsSlice.test.ts
-✓ should handle addSession
+  workoutsSlice reducer
+    ✓ should handle addSession (31 ms)
+
+Test Suites: 1 passed, 1 total  
+Tests:       1 passed, 1 total  
+Snapshots:   0 total  
+Time:        0.793 s, estimated 1 s  
+Ran all test suites matching /src\/store\/slices\/__tests__\/workoutsSlice.test.ts/i.
+
 ```
 
 ---
