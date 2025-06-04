@@ -109,15 +109,3 @@ PASS src/store/slices/__tests__/workoutsSlice.test.ts
 - [x] Unit tests for offline slice, retry, and config
 
 ---
-
-## 🚧 In Progress / To Do
-
-- [ ] Debounced Search (Workout screen)
-- [ ] README and Documentation finalization
-- [ ] Demo screen or video
-
----
-
-## 📄 License
-
-MIT License – © 2025 Your Name or Organization
