@@ -10,7 +10,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import CustomText from '../../components/common/CustomText';
 import { colors } from '../../constants/colors';
-import { responsiveFontSize } from '../../constants/sizes';
+import { responsiveFontSize, windowWidth, windowHeight } from '../../constants/sizes';
 import ScreenHeader from '../../components/common/ScreenHeader';
 import { Exercise } from '../../store/types/types';
 import { WorkoutTemplate, workoutTemplates } from '../../services/sync/mockWorkoutTemplates';
@@ -176,8 +176,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundLight,
   },
   listContentContainer: {
-    paddingHorizontal: 16,
-    paddingBottom: 16, // Add padding at the bottom if needed for the footer
+    paddingHorizontal: windowWidth * 0.04,
+    paddingBottom: windowHeight * 0.02,
   },
   loaderContainer: {
     flex: 1,
@@ -185,16 +185,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   searchContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 12,
+    paddingHorizontal: windowWidth * 0.04,
+    paddingTop: windowHeight * 0.01,
+    paddingBottom: windowHeight * 0.015,
   },
 
   searchInput: {
     backgroundColor: colors.background,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    borderRadius: windowWidth * 0.03,
+    paddingHorizontal: windowWidth * 0.04,
+    paddingVertical: windowHeight * 0.015,
     fontSize: responsiveFontSize(16),
     color: colors.textPrimary,
     borderWidth: 1,
@@ -202,22 +202,22 @@ const styles = StyleSheet.create({
   },
   workoutCard: {
     backgroundColor: colors.background,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 16,
+    borderRadius: windowWidth * 0.04,
+    padding: windowWidth * 0.04,
+    marginBottom: windowHeight * 0.02,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
-    borderLeftWidth: 4,
+    borderLeftWidth: windowWidth * 0.01,
     borderLeftColor: colors.primary,
   },
   workoutHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: windowHeight * 0.02,
   },
   syncedChip: {
     paddingHorizontal: 12,
@@ -231,8 +231,8 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 24, // Space above the button
-    marginBottom: 16, // Space below the button
+    marginTop: 24,
+    marginBottom: 16,
   },
   statsContainer: {
     flexDirection: 'row',
@@ -244,12 +244,5 @@ const styles = StyleSheet.create({
   statBox: {
     alignItems: 'center',
     flex: 1,
-  },
-  startButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 30,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginVertical: 16,
   },
 });
