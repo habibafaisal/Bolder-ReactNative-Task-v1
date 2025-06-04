@@ -12,7 +12,7 @@ import { FlashList } from '@shopify/flash-list';
 import { colors } from '../../constants/colors';
 import CustomText from '../../components/common/CustomText';
 import Button from '../../components/common/Button';
-import { responsiveFontSize, windowHeight } from '../../constants/sizes';
+import { responsiveFontSize, windowHeight, windowWidth } from '../../constants/sizes';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ThunkDispatch } from 'redux-thunk';
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: windowHeight * 0.014,
     backgroundColor: colors.backgroundLight,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
@@ -195,31 +195,31 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
-    paddingBottom: 10,
+    paddingBottom: windowHeight * 0.014,
     borderBottomWidth: 1,
     borderBottomColor: colors.borderLight,
   },
   statusChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 20,
+    paddingHorizontal: windowWidth * 0.025,
+    paddingVertical: windowHeight * 0.007,
+    borderRadius: windowWidth * 0.05,
   },
   durationChip: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.primaryLight,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 20,
+    paddingHorizontal: windowWidth * 0.025,
+    paddingVertical: windowHeight * 0.007,
+    borderRadius: windowWidth * 0.05,
   },
   exercisesList: {},
   exerciseItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: windowHeight * 0.014,
     borderBottomWidth: 1,
     borderBottomColor: colors.borderLight,
   },
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 30,
+    padding: windowWidth * 0.07,
     marginTop: windowHeight * 0.15,
     backgroundColor: colors.backgroundLight,
   },
