@@ -21,13 +21,13 @@ import { WorkoutSession } from '../../store/types/types';
 import { forceSync } from '../../services/sync/sync';
 
 const WorkoutHistory: React.FC = () => {
+  const [forceSyncSwitch, setForceSyncSwitch] = useState(false);
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
   const sessions = useSelector((state: RootState) => state.workouts.sessions);
   const isOnline = useSelector((state: RootState) => state.offline?.online);
   const { syncing } = useSelector(
     (state: RootState) => state.workouts,
   );
-  const [forceSyncSwitch, setForceSyncSwitch] = useState(false);
   const keyExtractor = useCallback(
     (item: any, i: number) => `${i}-${item.id}`,
     [],
@@ -44,7 +44,7 @@ const WorkoutHistory: React.FC = () => {
           <CustomText
             fontSize={responsiveFontSize(13)}
             color={colors.textInverse}
-            textMessage={`${item.exercises.length} sec(s)`}
+            textMessage={`${item?.duration} sec(s)` || '0'}
           />
         </View>
         <View
@@ -57,7 +57,7 @@ const WorkoutHistory: React.FC = () => {
           <CustomText
             fontSize={responsiveFontSize(13)}
             color={colors.textInverse}
-            textMessage={item.synced ? 'Completed' : 'Pending'}
+            textMessage={item.synced ? 'Completed ✅' : 'Pending 🕒'}
           />
         </View>
       </View>
@@ -84,7 +84,6 @@ const WorkoutHistory: React.FC = () => {
       </View>
     </View>
   );
-  console.log('syncing', syncing);
   const sync = () => {
     dispatch(forceSync());
   }
@@ -97,7 +96,7 @@ const WorkoutHistory: React.FC = () => {
       <View style={styles.networkStatusContainer}>
         <CustomText
           fontSize={responsiveFontSize(13)}
-          textMessage={isOnline ? 'You are Online' : 'You are Offline'}
+          textMessage={isOnline ? 'You are Online ✅' : 'You are Offline 🔌'}
           color={isOnline ? colors.success : colors.pending}
         />
         <View style={styles.forceSyncContainer}>

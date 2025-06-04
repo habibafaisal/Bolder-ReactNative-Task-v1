@@ -239,7 +239,7 @@ const WorkoutSession = () => {
           <CustomText
             fontSize={responsiveFontSize(14)}
             color={colors.textSecondary}
-            textMessage={isConnected ? 'Online' : 'Offline'}
+            textMessage={isConnected ? 'Online ✅' : 'Offline 🔌'}
           />
         </View>
 

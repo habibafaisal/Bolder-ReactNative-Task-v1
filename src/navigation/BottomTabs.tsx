@@ -22,8 +22,10 @@ function BottomTabs() {
       <Tab.Screen
         name="WorkoutSession"
         component={WorkoutSession}
+
         options={{
           tabBarLabel: 'Session',
+          tabBarIcon: ({ color, size }) => null,
         }}
       />
       <Tab.Screen
@@ -31,6 +33,7 @@ function BottomTabs() {
         component={WorkoutHistory}
         options={{
           tabBarLabel: 'History',
+          tabBarIcon: ({ color, size }) => null,
         }}
       />
       <Tab.Screen
@@ -38,6 +41,7 @@ function BottomTabs() {
         component={WorkoutComponent}
         options={{
           tabBarLabel: 'Workouts',
+          tabBarIcon: ({ color, size }) => null,
         }}
       />
     </Tab.Navigator>

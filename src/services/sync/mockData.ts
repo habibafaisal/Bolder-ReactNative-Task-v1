@@ -7,6 +7,7 @@ const mockWorkouts: WorkoutSession[] = [
   {
     id: '1',
     date: new Date().toISOString(),
+    duration: 10,
     exercises: [
       {
         id: 'pushups',
@@ -22,6 +23,7 @@ const mockWorkouts: WorkoutSession[] = [
   {
     id: '2',
     date: new Date(Date.now() - 86400000).toISOString(),
+    duration: 10,
     exercises: [
       {
         id: 'deadlift',
@@ -43,6 +45,7 @@ const mockWorkouts: WorkoutSession[] = [
   {
     id: '3',
     date: new Date(Date.now() - 2 * 86400000).toISOString(),
+    duration: 10,
     exercises: [
       {
         id: 'pullups',
@@ -57,6 +60,7 @@ const mockWorkouts: WorkoutSession[] = [
   {
     id: '4',
     date: new Date(Date.now() - 2 * 86400000).toISOString(),
+    duration: 10,
     exercises: [
       {
         id: 'pullups',
@@ -71,6 +75,7 @@ const mockWorkouts: WorkoutSession[] = [
   {
     id: '5',
     date: new Date(Date.now() - 2 * 86400000).toISOString(),
+    duration: 10,
     exercises: [
       {
         id: 'pullups',
