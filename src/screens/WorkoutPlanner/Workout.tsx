@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  TextInput,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import React, { useState, useEffect, useCallback } from 'react';
@@ -129,7 +130,15 @@ const Workout = () => {
   return (
     <View style={styles.container}>
       <ScreenHeader title="Workout Types" />
-
+      <View style={styles.searchContainer}>
+        <TextInput
+          value={searchTerm}
+          onChangeText={handleSearchChange}
+          placeholder="Search workouts..."
+          placeholderTextColor={colors.textSecondary}
+          style={styles.searchInput}
+        />
+      </View>
       {loading ? (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color={colors.primary} />
@@ -174,6 +183,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  searchContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 12,
+  },
+
+  searchInput: {
+    backgroundColor: colors.background,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: responsiveFontSize(16),
+    color: colors.textPrimary,
+    borderWidth: 1,
+    borderColor: colors.border || '#ccc',
   },
   workoutCard: {
     backgroundColor: colors.background,
