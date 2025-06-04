@@ -5,8 +5,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { WorkoutTemplate, workoutTemplates } from '../../services/sync/mockWorkoutTemplates';
 import CustomText from '../../components/common/CustomText';
 import { RootStackParamList } from '../../navigation/navigation.types';
-
-
+import { responsiveFontSize, windowWidth, windowHeight } from '../../constants/sizes';
 type WorkoutDetailRouteProp = RouteProp<RootStackParamList, 'WorkoutDetail'>;
 
 
@@ -84,29 +83,29 @@ const styles = StyleSheet.create({
         backgroundColor: colors.backgroundLight,
     },
     contentContainer: {
-        paddingHorizontal: 20,
-        paddingVertical: 24,
+        paddingHorizontal: windowWidth * 0.05,
+        paddingVertical: windowHeight * 0.03,
     },
     centeredContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 20,
+        padding: windowWidth * 0.05,
         backgroundColor: colors.backgroundLight,
     },
     headerContainer: {
-        marginBottom: 32,
+        marginBottom: windowHeight * 0.04,
         alignItems: 'center',
     },
     metricsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems: 'flex-start', // Align items to the start for varied text heights
-        marginBottom: 32,
-        paddingVertical: 20,
-        paddingHorizontal: 10,
+        alignItems: 'flex-start',
+        marginBottom: windowHeight * 0.04,
+        paddingVertical: windowHeight * 0.025,
+        paddingHorizontal: windowWidth * 0.025,
         backgroundColor: colors.surface,
-        borderRadius: 12,
+        borderRadius: windowWidth * 0.03,
         shadowColor: colors.shadow,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -115,18 +114,18 @@ const styles = StyleSheet.create({
     },
     metricItem: {
         alignItems: 'center',
-        paddingHorizontal: 10, // For spacing between metric items
-        flex: 1, // Distribute space equally among metric items
+        paddingHorizontal: windowWidth * 0.025,
+        flex: 1,
     },
     exercisesHeaderContainer: {
-        marginBottom: 20,
+        marginBottom: windowHeight * 0.025,
         alignItems: 'center',
     },
     exerciseCard: {
         backgroundColor: colors.surface,
-        borderRadius: 10,
-        padding: 20,
-        marginBottom: 20,
+        borderRadius: windowWidth * 0.025,
+        padding: windowWidth * 0.05,
+        marginBottom: windowHeight * 0.025,
         shadowColor: colors.shadow,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.08,
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        marginTop: 10, // Spacing between exercise name and its details
+        marginTop: windowHeight * 0.012,
     },
 });
 

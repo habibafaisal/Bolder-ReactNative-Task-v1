@@ -48,6 +48,15 @@ npm test
 
 ---
 
+## 🧠 Architecture Decision Records (ADRs)
+
+Key architectural decisions are documented in the [`docs/adrs`](./docs/adrs) folder:
+
+- [ADR-001: Custom Retry Logic](./docs/adrs/ADR-001-custom-retry-logic.md)
+- [ADR-002: Conflict Resolution Strategy](./docs/adrs/ADR-002-conflict-resolution.md)
+- [ADR-003: Schema Migration Strategy](./docs/adrs/ADR-003-schema-migrations.md)
+
+
 ## ⚙️ Performance Optimizations
 
 - ✅ FlashList replaces FlatList for better memory usage and speed

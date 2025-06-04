@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import NetInfo from '@react-native-community/netinfo';
 import CustomText from '../../components/common/CustomText';
 import { colors } from '../../constants/colors';
-import { responsiveFontSize } from '../../constants/sizes';
+import { responsiveFontSize, windowWidth, windowHeight } from '../../constants/sizes';
 import { mockExercises } from '../../services/sync/mockData';
 import { resetSession, updateSession } from '../../store/slices/workoutsSlice';
 import { AppDispatch, RootState } from '../../store';
@@ -380,27 +380,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundLight,
-    padding: 16,
+    padding: windowWidth * 0.04,
   },
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 16,
+    marginVertical: windowHeight * 0.02,
   },
   liveTrackingButton: {
     backgroundColor: '#f8d7da',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    paddingHorizontal: windowWidth * 0.04,
+    paddingVertical: windowHeight * 0.01,
+    borderRadius: windowWidth * 0.05,
   },
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: colors.background,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
+    borderRadius: windowWidth * 0.03,
+    padding: windowWidth * 0.04,
+    marginBottom: windowHeight * 0.03,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -416,21 +416,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: windowHeight * 0.03,
   },
   addSetButton: {
     backgroundColor: colors.primary,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
+    paddingHorizontal: windowWidth * 0.04,
+    paddingVertical: windowHeight * 0.012,
+    borderRadius: windowWidth * 0.02,
   },
   finishButton: {
     backgroundColor: colors.primary,
-    paddingVertical: 16,
-    borderRadius: 30,
+    paddingVertical: windowHeight * 0.02,
+    borderRadius: windowWidth * 0.075,
     alignItems: 'center',
-    marginTop: 16,
-    marginBottom: 24,
+    marginTop: windowHeight * 0.02,
+    marginBottom: windowHeight * 0.03,
     // Gradient effect with background color
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
@@ -446,25 +446,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 8,
+    marginVertical: windowHeight * 0.01,
   },
   networkIndicator: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: 8,
+    width: windowWidth * 0.025,
+    height: windowWidth * 0.025,
+    borderRadius: windowWidth * 0.0125,
+    marginRight: windowWidth * 0.02,
   },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: windowWidth * 0.05,
   },
   modalContent: {
     backgroundColor: colors.background,
-    borderRadius: 16,
-    padding: 24,
+    borderRadius: windowWidth * 0.04,
+    padding: windowWidth * 0.06,
     width: '90%',
     alignItems: 'center',
     shadowColor: '#000',
@@ -477,13 +477,13 @@ const styles = StyleSheet.create({
   modalButtonsContainer: {
     flexDirection: 'column',
     width: '100%',
-    marginTop: 24,
+    marginTop: windowHeight * 0.03,
   },
   modalButton: {
-    paddingVertical: 16,
-    borderRadius: 30,
+    paddingVertical: windowHeight * 0.02,
+    borderRadius: windowWidth * 0.075,
     alignItems: 'center',
-    marginTop: 12,
+    marginTop: windowHeight * 0.015,
     width: '100%',
   },
   startNewButton: {
