@@ -6,7 +6,17 @@ const customRetry = (action: any, retries: number, error: any, isOnline: boolean
         return 10000;
     }
 
-    const status = error?.response?.status;
+    const status = error?.response?.status ?? error?.status; // fallback
+    const hasServerVersion = !!error?.serverVersion || !!error?.response?.data?.serverVersion;
+
+    const isConflict = status === 409 && hasServerVersion;
+    console.log('isConflict', isConflict, 'status:', status, 'hasServerVersion:', hasServerVersion);
+    console.log('error', JSON.stringify(error, null, 2));
+
+    if (isConflict) {
+        console.log('No retry for conflict.');
+        return false;
+    }
 
     if (status && status >= 400 && status < 500 && status !== 429) {
         console.log(`Permanent error ${status} - no retry`);

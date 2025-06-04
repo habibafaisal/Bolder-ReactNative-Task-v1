@@ -7,11 +7,17 @@ import { WorkoutSession } from '../types/types';
 
 let isOnline: boolean
 
-const detectNetwork = (callback: (arg0: boolean) => void) => {
+const detectNetwork = (callback: (isConnected: boolean) => void) => {
+  NetInfo.fetch().then(state => {
+    isOnline = !!state.isConnected;
+    callback(isOnline);
+  });
+
   const unsubscribe = NetInfo.addEventListener(state => {
     isOnline = !!state.isConnected;
-    callback(!!state.isConnected);
+    callback(isOnline);
   });
+
   return unsubscribe;
 };
 
@@ -24,6 +30,7 @@ export const customOfflineConfig = {
       const localWorkout: WorkoutSession = action.payload;
 
       const isConflict = Math.random() < 0.5;
+      console.log(isConflict, 'isConflict')
 
       if (isConflict) {
         const serverVersion: WorkoutSession = {
@@ -31,12 +38,12 @@ export const customOfflineConfig = {
           id: localWorkout.id + '-server',
           synced: true,
         };
-
+        console.log({ serverVersion })
         const error = {
           response: { status: 409 },
           serverVersion,
         };
-
+        console.log('error', error)
         return Promise.reject(error);
       }
 

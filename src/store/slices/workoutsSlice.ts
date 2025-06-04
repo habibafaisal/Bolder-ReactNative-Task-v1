@@ -73,6 +73,7 @@ const workoutsSlice = createSlice({
       state.lastSyncFailed = action.payload;
     },
     syncSuccess(state, action: PayloadAction<{ id: string }>) {
+      console.log('SUCCESSSS', action.payload)
       const session = state.sessions.find(s => s.id === action.payload.id);
       if (session) {
         session.synced = true;
@@ -80,8 +81,10 @@ const workoutsSlice = createSlice({
       }
       state.lastSyncFailed = false;
     },
-    syncFailure(state, action: PayloadAction<{ id: string; conflict?: WorkoutSession }>) {
+    syncFailure(state, action: PayloadAction<{ id?: string; conflict?: WorkoutSession }>) {
+      console.log('failed', action.payload)
       const session = state.sessions.find(s => s.id === action.payload.id);
+      console.log('session', { session })
       if (session) {
         session.synced = false;
         session.syncFailed = true;

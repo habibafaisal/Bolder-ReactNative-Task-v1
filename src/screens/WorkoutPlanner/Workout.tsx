@@ -2,10 +2,10 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { FlashList } from '@shopify/flash-list';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import CustomText from '../../components/common/CustomText';
 import { colors } from '../../constants/colors';
@@ -23,7 +23,8 @@ type NavigationProp = NativeStackNavigationProp<
   'WorkoutDetail'
 >;
 const Workout = () => {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<NavigationProp>(); // Moved up for keyExtractor
+  const keyExtractor = useCallback((item: WorkoutTemplate) => item.id.toString(), []);
   const [loading, setLoading] = useState<boolean>(false);
   const [types, setTypes] = useState<WorkoutTemplate[]>([]);
 
@@ -68,7 +69,7 @@ const Workout = () => {
     navigation.navigate('WorkoutSession' as never);
   };
 
-  const renderWorkoutCard = (workout: Exercise) => (
+  const renderWorkoutCard = useCallback(({ item: workout }: { item: WorkoutTemplate }) => (
     <TouchableOpacity
       key={workout.id}
       style={styles.workoutCard}
@@ -87,7 +88,7 @@ const Workout = () => {
           <CustomText
             fontSize={responsiveFontSize(28)}
             color={colors.primary}
-            textMessage={workout?.minutes?.toString()}
+            textMessage={workout?.minutes?.toString() || ''}
           />
           <CustomText
             fontSize={responsiveFontSize(14)}
@@ -100,7 +101,7 @@ const Workout = () => {
           <CustomText
             fontSize={responsiveFontSize(28)}
             color={colors.primary}
-            textMessage={workout.exercises.length}
+            textMessage={workout.exercises.length.toString()}
           />
           <CustomText
             fontSize={responsiveFontSize(14)}
@@ -113,7 +114,7 @@ const Workout = () => {
           <CustomText
             fontSize={responsiveFontSize(28)}
             color={colors.primary}
-            textMessage={workout.calories + 'k'}
+            textMessage={workout.calories?.toString() + 'k' || ''}
           />
           <CustomText
             fontSize={responsiveFontSize(14)}
@@ -123,7 +124,7 @@ const Workout = () => {
         </View>
       </View>
     </TouchableOpacity>
-  );
+  ), [navigation]);
 
   return (
     <View style={styles.container}>
@@ -134,21 +135,25 @@ const Workout = () => {
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
       ) : (
-        <ScrollView
+        <FlashList
+          data={filteredTypes}
+          renderItem={renderWorkoutCard}
+          keyExtractor={keyExtractor}
+          estimatedItemSize={150}
           showsVerticalScrollIndicator={false}
-          style={styles.scrollView}>
-          {types.map(renderWorkoutCard)}
-
-          <TouchableOpacity
-            style={styles.startButton}
-            onPress={handleStartWorkout}>
-            <CustomText
-              fontSize={responsiveFontSize(18)}
-              color={colors.textInverse}
-              textMessage="Start New Workout"
-            />
-          </TouchableOpacity>
-        </ScrollView>
+          contentContainerStyle={styles.listContentContainer}
+          ListFooterComponent={
+            <TouchableOpacity
+              style={styles.startButton}
+              onPress={handleStartWorkout}>
+              <CustomText
+                fontSize={responsiveFontSize(18)}
+                color={colors.textInverse}
+                textMessage="Start New Workout"
+              />
+            </TouchableOpacity>
+          }
+        />
       )}
     </View>
   );
@@ -161,8 +166,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundLight,
   },
-  scrollView: {
-    padding: 16,
+  listContentContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 16, // Add padding at the bottom if needed for the footer
   },
   loaderContainer: {
     flex: 1,
@@ -194,6 +200,14 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  startButton: {
+    backgroundColor: colors.primary,
+    paddingVertical: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 24, // Space above the button
+    marginBottom: 16, // Space below the button
   },
   statsContainer: {
     flexDirection: 'row',

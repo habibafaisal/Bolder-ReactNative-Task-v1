@@ -32,6 +32,7 @@ const WorkoutSession = () => {
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(true);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const isConnected = useSelector((state: RootState) => state.offline?.online);
+  const sessions = useSelector((state: RootState) => state.workouts.sessions);
   const [conflictSession, setConflictSession] = useState<WorkoutSessionType | null>(null);
   const [showWorkoutCompleteModal, setShowWorkoutCompleteModal] =
     useState<boolean>(false);
@@ -44,9 +45,9 @@ const WorkoutSession = () => {
     setExercisesCount(mockExercises.length);
     setSetsCount(mockExercises.reduce((acc, ex) => acc + (ex.sets ?? 0), 0));
   }, []);
+  // console.log('conflictedSession', sessions);
   useEffect(() => {
     if (conflictedSession) {
-      console.log('conflictedSession', conflictedSession);
       setConflictSession(conflictedSession);
       setShowConflictModal(true);
     }

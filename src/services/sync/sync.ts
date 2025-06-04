@@ -1,7 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { WorkoutSession } from "../../store/types/types";
 import { RootState } from "../../store";
-
+const rollbackWithConflict = (action: any, error: any) => ({
+    type: 'workouts/syncFailure',
+    payload: {
+        id: action.payload.id,
+        conflict: error?.serverVersion,
+    },
+    meta: {
+        handleConflict: true,
+    },
+});
 
 export const createWorkoutSession = (session: WorkoutSession) => ({
     type: 'workouts/addSession',
@@ -13,13 +22,7 @@ export const createWorkoutSession = (session: WorkoutSession) => ({
                 payload: session
             },
             commit: { type: 'workouts/syncSuccess', payload: { id: session.id } },
-            rollback: {
-                type: 'workouts/syncFailure',
-                payload: { id: session.id },
-                meta: {
-                    handleConflict: true,
-                },
-            },
+            rollback: rollbackWithConflict
         },
     },
 });
@@ -42,10 +45,7 @@ export const forceSync = createAsyncThunk(
                             type: 'workouts/syncSuccess',
                             payload: { id: session.id },
                         },
-                        rollback: {
-                            type: 'workouts/syncFailure',
-                            payload: { id: session.id },
-                        },
+                        rollback: rollbackWithConflict,
 
                     },
                 },
