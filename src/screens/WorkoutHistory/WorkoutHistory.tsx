@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
+import { Switch } from 'react-native';
 import {
   View,
   StyleSheet,
@@ -17,24 +18,16 @@ import { RootState } from '../../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { WorkoutSession } from '../../store/types/types';
+import { forceSync } from '../../services/sync/sync';
 
 const WorkoutHistory: React.FC = () => {
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
   const sessions = useSelector((state: RootState) => state.workouts.sessions);
   const isOnline = useSelector((state: RootState) => state.offline?.online);
-  const { syncing, lastSyncFailed } = useSelector(
+  const { syncing } = useSelector(
     (state: RootState) => state.workouts,
   );
-  // console.log('sessions ss', sessions, { syncing, lastSyncFailed });
-  // useEffect(() => {
-  //   fetch();
-  // }, []);
-  // const fetch = async () => {
-  //   const stored = await AsyncStorage.getItem('@workouts');
-  //   console.log('stored', stored);
-  //   await dispatch(loadWorkoutsFromStorage());
-  // };
-
+  const [forceSyncSwitch, setForceSyncSwitch] = useState(false);
   const keyExtractor = useCallback(
     (item: any, i: number) => `${i}-${item.id}`,
     [],
@@ -91,59 +84,41 @@ const WorkoutHistory: React.FC = () => {
       </View>
     </View>
   );
-  const EmptyList = () => {
-    return (
-      <View style={styles.emptyState}>
-        <CustomText
-          fontSize={responsiveFontSize(20)}
-          textMessage="No workouts recorded yet!"
-          color={colors.textSecondary}
-          align="center"
-        />
-        <CustomText
-          fontSize={responsiveFontSize(15)}
-          textMessage="Start your first workout to see your progress here."
-          color={colors.textSecondary}
-          align="center"
-        />
-        <Button
-          btnLabel="Log New Workout"
-          buttonBackgroundColor={colors.secondary}
-          buttonTextColor={colors.textInverse}
-          width={200}
-          radius={10}
-          onPress={() => console.log('Navigate to new workout screen')}
-        />
-      </View>
-    );
-  };
+  console.log('syncing', syncing);
+  const sync = () => {
+    dispatch(forceSync());
+  }
   return (
     <View style={styles.container}>
       <ScreenHeader
         title="Workout History"
-        rightButton={{
-          label: 'Filter',
-          onPress: () => console.log('Filter pressed'),
-        }}
+
       />
       <View style={styles.networkStatusContainer}>
         <CustomText
           fontSize={responsiveFontSize(13)}
           textMessage={isOnline ? 'You are Online' : 'You are Offline'}
           color={isOnline ? colors.success : colors.pending}
-          align="center"
         />
+        <View style={styles.forceSyncContainer}>
+          <CustomText
+            fontSize={responsiveFontSize(13)}
+            textMessage="Force Sync"
+            color={colors.textSecondary}
+          />
+          <Switch
+            trackColor={{ false: colors.border, true: colors.primaryLight }}
+            thumbColor={forceSyncSwitch ? colors.primary : colors.surface}
+            ios_backgroundColor={colors.border}
+            onValueChange={(newValue) => {
+              setForceSyncSwitch(newValue);
+              sync();
+            }}
+            value={forceSyncSwitch}
+            disabled={syncing}
+          />
+        </View>
       </View>
-
-      {/* {lastSyncFailed ? (
-        <Text style={{ color: 'red', textAlign: 'center' }}>
-          Last Sync failed. Will retry when online.
-        </Text>
-      ) : (
-        <Text style={{ color: 'green', textAlign: 'center' }}>
-          Last Sync Success.
-        </Text>
-      )} */}
       {syncing && <ActivityIndicator />}
       <FlashList
         data={sessions}
@@ -180,18 +155,30 @@ const WorkoutHistory: React.FC = () => {
     </View>
   );
 };
+export default WorkoutHistory;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundLight,
   },
-  networkStatusContainer: {
-    marginVertical: windowHeight * 0.02,
-  },
   listContentContainer: {
     paddingHorizontal: 15,
     paddingBottom: 20,
+  },
+  networkStatusContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: colors.backgroundLight,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  forceSyncContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   workoutCard: {
     backgroundColor: colors.card,
@@ -250,4 +237,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WorkoutHistory;

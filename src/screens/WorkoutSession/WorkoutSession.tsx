@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import {
   StyleSheet,
   View,
@@ -18,6 +19,7 @@ import { AppDispatch, RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Exercise, WorkoutSession as WorkoutSessionType } from '../../store/types/types';
 import { createWorkoutSession } from '../../services/sync/sync';
+import { v4 as uuidv4 } from 'uuid';
 
 const WorkoutSession = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -108,7 +110,7 @@ const WorkoutSession = () => {
 
     try {
       const newCompletedWorkout: WorkoutSessionType = {
-        id: Date.now().toString(),
+        id: uuidv4(),
         date: new Date().toISOString().split('T')[0],
         duration: durationSeconds,
         exercises: [...exercises],

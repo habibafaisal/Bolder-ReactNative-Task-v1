@@ -56,7 +56,7 @@ export const customOfflineConfig = {
       status &&
       status >= 400 &&
       status < 500 &&
-      status !== 409 && // do not discard conflict errors
+      status !== 409 &&
       status !== 429;
 
     return shouldDiscard;
@@ -65,4 +65,5 @@ export const customOfflineConfig = {
     return customRetry(action, retries, error, isOnline);
   },
   detectNetwork,
+  rehydrate: true,
 };

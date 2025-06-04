@@ -55,7 +55,7 @@ const Workout = () => {
   const fetchWorkoutTypes = async () => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 100));
       setTypes(workoutTemplates);
     } catch (error) {
       console.error('Failed to fetch workout types:', error);

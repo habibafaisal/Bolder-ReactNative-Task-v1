@@ -45,11 +45,15 @@ const workoutsSlice = createSlice({
       state.lastSyncFailed = false;
     },
     addSession(state, action: PayloadAction<WorkoutSession>) {
-      state.sessions.push({
-        ...action.payload,
-        synced: action.payload.synced ?? false,
-      });
-      state.stats.totalSessions += 1;
+      const exists = state.sessions.some(s => s.id === action.payload.id);
+      console.log('exists', exists);
+      if (!exists) {
+        state.sessions.push({
+          ...action.payload,
+          synced: action.payload.synced ?? false,
+        });
+        state.stats.totalSessions += 1;
+      }
     },
     updateSession: (state, action: PayloadAction<{ session: WorkoutSession }>) => {
       const index = state.sessions.findIndex(s => s.id === action.payload.session.id);
