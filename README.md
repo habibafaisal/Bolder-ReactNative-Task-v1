@@ -55,6 +55,7 @@ Key architectural decisions are documented in the [`docs/adrs`](./docs/adrs) fol
 - [ADR-001: Custom Retry Logic](./docs/adrs/ADR-001-custom-retry-logic.md)
 - [ADR-002: Conflict Resolution Strategy](./docs/adrs/ADR-002-conflict-resolution.md)
 - [ADR-003: Schema Migration Strategy](./docs/adrs/ADR-003-schema-migrations.md)
+- [ADR-004: Responsive Layout Over Fixed Sizes](./docs/adrs/ADR-004-responsive-layout.md)
 
 
 ## ⚙️ Performance Optimizations
