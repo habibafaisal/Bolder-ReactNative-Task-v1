@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { Switch } from 'react-native';
+import React, {useCallback, useState, useEffect} from 'react';
+import {Switch} from 'react-native';
 import {
   View,
   StyleSheet,
@@ -8,31 +8,34 @@ import {
   Text,
 } from 'react-native';
 import ScreenHeader from '../../components/common/ScreenHeader';
-import { FlashList } from '@shopify/flash-list';
-import { colors } from '../../constants/colors';
+import {FlashList} from '@shopify/flash-list';
+import {colors} from '../../constants/colors';
 import CustomText from '../../components/common/CustomText';
 import Button from '../../components/common/Button';
-import { responsiveFontSize, windowHeight, windowWidth } from '../../constants/sizes';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from '@reduxjs/toolkit';
-import { WorkoutSession } from '../../store/types/types';
-import { forceSync } from '../../services/sync/sync';
+import {
+  responsiveFontSize,
+  windowHeight,
+  windowWidth,
+} from '../../constants/sizes';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../store';
+import {ThunkDispatch} from 'redux-thunk';
+import {AnyAction} from '@reduxjs/toolkit';
+import {WorkoutSession} from '../../store/types/types';
+import {forceSync} from '../../services/sync/sync';
 
 const WorkoutHistory: React.FC = () => {
   const [forceSyncSwitch, setForceSyncSwitch] = useState(false);
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
   const sessions = useSelector((state: RootState) => state.workouts.sessions);
   const isOnline = useSelector((state: RootState) => state.offline?.online);
-  const { syncing } = useSelector(
-    (state: RootState) => state.workouts,
-  );
+  const {syncing} = useSelector((state: RootState) => state.workouts);
   const keyExtractor = useCallback(
     (item: any, i: number) => `${i}-${item.id}`,
     [],
   );
-  const renderWorkoutItem = ({ item }: { item: WorkoutSession }) => (
+  console.log(sessions);
+  const renderWorkoutItem = ({item}: {item: WorkoutSession}) => (
     <View style={styles.workoutCard}>
       <View style={styles.workoutHeader}>
         <CustomText
@@ -44,7 +47,7 @@ const WorkoutHistory: React.FC = () => {
           <CustomText
             fontSize={responsiveFontSize(13)}
             color={colors.textInverse}
-            textMessage={`${item?.duration} sec(s)` || '0'}
+            textMessage={`${item?.duration?.toLocaleString()} sec(s)` || '0'}
           />
         </View>
         <View
@@ -86,13 +89,10 @@ const WorkoutHistory: React.FC = () => {
   );
   const sync = () => {
     dispatch(forceSync());
-  }
+  };
   return (
     <View style={styles.container}>
-      <ScreenHeader
-        title="Workout History"
-
-      />
+      <ScreenHeader title="Workout History" />
       <View style={styles.networkStatusContainer}>
         <CustomText
           fontSize={responsiveFontSize(13)}
@@ -106,10 +106,10 @@ const WorkoutHistory: React.FC = () => {
             color={colors.textSecondary}
           />
           <Switch
-            trackColor={{ false: colors.border, true: colors.primaryLight }}
+            trackColor={{false: colors.border, true: colors.primaryLight}}
             thumbColor={forceSyncSwitch ? colors.primary : colors.surface}
             ios_backgroundColor={colors.border}
-            onValueChange={(newValue) => {
+            onValueChange={newValue => {
               setForceSyncSwitch(newValue);
               sync();
             }}
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 15,
     shadowColor: colors.shadowLight,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 4,
@@ -235,4 +235,3 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundLight,
   },
 });
-

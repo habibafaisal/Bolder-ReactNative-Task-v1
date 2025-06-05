@@ -1,13 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Exercise, WorkoutSession } from '../../store/types/types';
-import { addSession } from '../../store/slices/workoutsSlice';
-import { AppDispatch } from '../../store';
+import {Exercise, WorkoutSession} from '../../store/types/types';
+import {addSession} from '../../store/slices/workoutsSlice';
+import {AppDispatch} from '../../store';
 
 const mockWorkouts: WorkoutSession[] = [
   {
     id: '1',
     date: new Date().toISOString(),
-    duration: 10,
+    duration: 60,
     exercises: [
       {
         id: 'pushups',
@@ -16,14 +16,14 @@ const mockWorkouts: WorkoutSession[] = [
         reps: 15,
         categoryId: 'bodyweight',
       },
-      { id: 'squats', name: 'Squats', sets: 4, reps: 12, categoryId: 'legs' },
+      {id: 'squats', name: 'Squats', sets: 4, reps: 12, categoryId: 'legs'},
     ],
     synced: true,
   },
   {
     id: '2',
     date: new Date(Date.now() - 86400000).toISOString(),
-    duration: 10,
+    duration: 13,
     exercises: [
       {
         id: 'deadlift',
@@ -60,7 +60,7 @@ const mockWorkouts: WorkoutSession[] = [
   {
     id: '4',
     date: new Date(Date.now() - 2 * 86400000).toISOString(),
-    duration: 10,
+    duration: 50,
     exercises: [
       {
         id: 'pullups',
@@ -75,7 +75,7 @@ const mockWorkouts: WorkoutSession[] = [
   {
     id: '5',
     date: new Date(Date.now() - 2 * 86400000).toISOString(),
-    duration: 10,
+    duration: 30,
     exercises: [
       {
         id: 'pullups',
